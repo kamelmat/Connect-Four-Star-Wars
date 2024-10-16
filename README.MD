@@ -55,7 +55,7 @@ The following packages are required for this project:
 ## 🎮 How to Play
 1. Run the game:
 ```bash
-python src/backend/main.py
+python src/main.py
 ```
 
 2. Follow the on-screen instructions to play!
