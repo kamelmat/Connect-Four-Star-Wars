@@ -1,6 +1,6 @@
 # 🎉 Star Wars Connect Four 🎉
 
-![Banner](assets/images/connectfour.jpg)
+![Banner](assets/images/StarWarsConnectFour.jpg)
 
 ## 🚀 Introduction
 Welcome to the ultimate Connect Four game with a Star Wars twist! May the best player win! 🌌
