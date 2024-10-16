@@ -33,10 +33,15 @@ We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING
 
 ## 🔥 Features
 🎮 Two-player Gameplay – Battle it out between the Rebel Alliance and the Empire!
+
 🔊 Epic Sound Effects – Hear the roar of Tie Fighters and X-Wings as you place your tokens.
+
 🎶 Background Music – Play with John Williams' space battle music.
+
 🌌 Animated Board – Tokens drop into the grid with animated effects and a space battle backdrop.
+
 💥 Victory Animations – Enjoy explosive animations when 4 in a row is achieved.
+
 🎨 Future Enhancements
 AI integration for single-player mode
 Online multiplayer functionality
