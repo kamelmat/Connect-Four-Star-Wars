@@ -1,6 +1,9 @@
 import cv2
 import pygame
 import pygame_gui
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dummy'  # Use dummy audio driver
+import glob
 from .Board import Board  # Comment this out if not using
 from .VictoryScreen import VictoryScreen
 from .CustomBoard import CustomBoard  # Import the CustomBoard
@@ -8,20 +11,23 @@ from .CustomBoard import CustomBoard  # Import the CustomBoard
 class Game:
     def __init__(self):
         # Initialize Pygame
+        print("Initializing Pygame...")
         pygame.init()
         
         # Set up the display
         self.width = 800
         self.height = 600
         self.screen = pygame.display.set_mode((self.width, self.height))
-        
+        print("Display set up.")
+
         # Load the font with increased size for victory message
-        self.font = pygame.font.Font("assets/fonts/StarJedi.ttf", 48)  # Increased font size for victory message
+        self.font = pygame.font.Font("/workspaces/Connect-Four-Star-Wars/assets/fonts/Starjedi.ttf", 48)  # Increased font size for victory message
         
         # Load the icons
-        self.empire_icon = pygame.image.load("assets/font-awesome/icons/empire.svg").convert_alpha()  # Ensure this path is correct
-        self.rebel_icon = pygame.image.load("assets/font-awesome/icons/rebel.svg").convert_alpha()  # Ensure this path is correct
-        
+        self.empire_icon = pygame.image.load("/workspaces/Connect-Four-Star-Wars/assets/font-awesome/icons/empire-icon.png").convert_alpha()  # Ensure this path is correct
+        self.rebel_icon = pygame.image.load("/workspaces/Connect-Four-Star-Wars/assets/font-awesome/icons/rebel-icon.png").convert_alpha()  # Ensure this path is correct
+        print("Icons loaded.")
+
         # Set the caption
         pygame.display.set_caption("Star Wars Connect 4")
         
@@ -30,6 +36,7 @@ class Game:
         
         # Initialize the custom board
         self.custom_board = CustomBoard(self)  # Ensure this is correctly initialized
+        print("Custom board initialized.")
         
         # Initialize the running flag
         self.running = True
@@ -39,12 +46,17 @@ class Game:
                 
         # Initialize the mixer and load sounds
         pygame.mixer.init()
-        self.background_music = pygame.mixer.Sound("assets/sounds/space_battle_music.mp3")
+        self.background_music = pygame.mixer.Sound("/workspaces/Connect-Four-Star-Wars/assets/sounds/space_battle_music.mp3")
         self.background_music.set_volume(1)
         self.background_music.play(-1)
+        print("Background music loaded and playing.")
 
-        # Load the video
-        self.background_video = cv2.VideoCapture("assets/animations/battle_of_endor.mov")
+        # Load wallpaper images
+        self.wallpapers = self.load_wallpapers("assets/animations/*.jpg")  # Adjust the pattern if needed
+        self.current_wallpaper_index = 0
+        self.wallpaper_change_time = 4000  # Time in milliseconds for each wallpaper
+        self.last_wallpaper_change = pygame.time.get_ticks()  # Get the current time
+        print(f"Loaded {len(self.wallpapers)} wallpapers.")
 
         # Initialize Pygame GUI
         self.ui_manager = pygame_gui.UIManager((self.width, self.height))  # No custom theme
@@ -62,26 +74,35 @@ class Game:
         self.restart_button.set_image(pygame.Surface((button_width, button_height)))  # Create a surface for the button
         self.restart_button.image.fill((50, 50, 50))  # Fill the button with a dark gray color
 
+    def load_wallpapers(self, pattern):
+        # Load all wallpaper images matching the pattern
+        images = []
+        for filepath in glob.glob(pattern):
+            image = pygame.image.load(filepath).convert()
+            images.append(pygame.transform.scale(image, (self.width, self.height)))  # Scale to fit the screen
+        return images
+
     def run(self):
+        self.wallpapers = self.load_wallpapers("/workspaces/Connect-Four-Star-Wars/assets/animations/*.jpg")  # Usa el patrón relativo
+        print("Starting the game loop...")
         while self.running:
             self.handle_events()
-            self.draw_background()  # Draw the background video
+            self.draw_background()  # Draw the background wallpaper
             self.custom_board.draw()  # Draw the custom board
             self.ui_manager.update(self.clock.tick(60) / 1000.0)  # Update the UI manager
             self.ui_manager.draw_ui(self.screen)  # Draw the UI elements
             pygame.display.flip()     # Update the display
 
     def draw_background(self):
-        ret, frame = self.background_video.read()  # Read a frame from the video
-        if ret:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert color from BGR to RGB
-            frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)  # Rotate the frame 90 degrees counterclockwise
-            frame = pygame.surfarray.make_surface(frame)  # Convert to Pygame surface
-            frame = pygame.transform.scale(frame, (self.width, self.height))  # Scale to window size
-            self.screen.blit(frame, (0, 0))  # Draw the frame
-        else:
-            # If the video ends, reset it to the beginning
-            self.background_video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+        # Check if it's time to change the wallpaper
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_wallpaper_change > self.wallpaper_change_time:
+            self.current_wallpaper_index = (self.current_wallpaper_index + 1) % len(self.wallpapers)
+            self.last_wallpaper_change = current_time
+
+        # Draw the current wallpaper
+        self.screen.blit(self.wallpapers[self.current_wallpaper_index], (0, 0))  # Draw the wallpaper
 
     def handle_events(self):
         for event in pygame.event.get():

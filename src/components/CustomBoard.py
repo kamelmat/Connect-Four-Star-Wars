@@ -8,7 +8,7 @@ class CustomBoard:
         self.rows = 6
         self.columns = 7
         self.cell_size = 80  # Size of each cell
-        self.board_texture = pygame.image.load("assets/textures/metal_texture.png").convert_alpha()  # Load metal texture
+        self.board_texture = pygame.image.load("/workspaces/Connect-Four-Star-Wars/assets/textures/metal_texture.png").convert_alpha()  # Load metal texture
         self.border_color = (100, 100, 100)  # Dark gray for a metallic look
         self.border_thickness = 8  # Thickness of the border
         self.glow_color_rebel = (0, 0, 255)  # Blue glow for Rebel
@@ -17,15 +17,15 @@ class CustomBoard:
         self.glow_direction = 1  # For increasing/decreasing glow intensity
 
         # Load Star Wars font
-        self.font = pygame.font.Font("assets/fonts/StarJedi.ttf", 24)  # Adjust the path as necessary
+        self.font = pygame.font.Font("/workspaces/Connect-Four-Star-Wars/assets/fonts/Starjedi.ttf", 24)  # Adjust the path as necessary
 
         # Initialize the grid for the pieces
         self.grid = [[None for _ in range(self.columns)] for _ in range(self.rows)]
         self.current_player = 'Imperial'  # Start with Imperial
 
         # Load Font Awesome icon images
-        self.empire_icon = pygame.image.load("assets/font-awesome/icons/empire-icon.png").convert_alpha()
-        self.rebel_icon = pygame.image.load("assets/font-awesome/icons/rebel-icon.png").convert_alpha()
+        self.empire_icon = pygame.image.load("/workspaces/Connect-Four-Star-Wars/assets/font-awesome/icons/empire-icon.png").convert_alpha()
+        self.rebel_icon = pygame.image.load("/workspaces/Connect-Four-Star-Wars/assets/font-awesome/icons/rebel-icon.png").convert_alpha()
 
     def draw(self):
         # Calculate the starting position to center the board
