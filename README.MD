@@ -72,8 +72,10 @@ python src/main.py
 ## 🤝 Contributing
 We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for more information.
 
+
 ## Colaborators:
 Thanks to Enresto Gozalez Lopez who fixed the container so we can see the game on a virtual desktop.🚀 **GRANDE ERNESTO 🏋🏻‍♀️**
+
 
 ## 📜 License
 This project is licensed under the MIT License. See the LICENSE file for details.
